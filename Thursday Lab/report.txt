@@ -1,0 +1,39 @@
+Baseline Recommendation Systems:
+
+Three recommendation systems were tested. The ground truth for success or failure was based on whether a recommended song had the same genre as the query song. In other words, we recorded a hit (True) if the recommended song had the same genre as the query song and a miss (False) otherwise.
+
+Some constraints were also included in the evaluation. The query song itself was removed from the possible recommendations to prevent the system from recommending the same song. Songs by the same artist were also removed so that we could explore recommendations outside of the query artist.
+
+The three baseline recommendation systems (given) produced the following mean precision@3 results:
+
+Raw inner product: 0.0929
+Cosine similarity: 0.1911
+TF-IDF cosine similarity: 0.2107
+
+Of the baseline systems, TF-IDF cosine similarity performed the best, with a mean precision@3 of approximately 21.07%.
+
+Engineering Experiments:
+
+After evaluating the baseline systems, I tested several additional approaches to see whether the recommendation results could be improved.
+
+The additional systems produced the following results:
+
+Correlation: 0.1905
+TF-IDF correlation: 0.1982
+Hybrid cosine + TF-IDF cosine: 0.2089
+Reduced-IDF TF-IDF cosine: 0.2351
+
+Report:
+
+For the first experiment, I tested correlation to see whether comparing the relationship between the word use patterns of songs after centering and standardizing the vectors would improve the recommendations. I also tested correlation using TF-IDF to see whether adding word importance would improve the results. Neither experiment outperformed TF-IDF cosine similarity, which at that point was the best baseline with a mean precision@3 of 0.2107.
+
+The second experiment tested a hybrid system that combined regular cosine similarity and TF-IDF cosine similarity. These were two of the stronger approaches, so the idea was to see whether combining the overall direction of the raw word-count vectors with the direction of the TF-IDF vectors would improve the recommendations. The hybrid system achieved 0.2089, which was close to the TF-IDF cosine baseline but did not outperform it.
+
+For the third experiment, I kept the TF-IDF cosine approach but changed the amount of weight given to IDF. Instead of using the normal TF-IDF calculation, I reduced the influence of IDF by using the square root of IDF. The idea was that rare words can be useful for distinguishing songs, but giving them too much importance may not necessarily help identify songs from the same genre. This experiment produced a mean precision@3 of 0.2351, or approximately 23.51%, which was the best result overall and outperformed the original TF-IDF cosine baseline of 21.07%.
+
+Conclusion:
+
+The experiments show that the original TF-IDF cosine similarity was the strongest of the provided baseline systems, but its performance could be improved by adjusting the importance given to word frequency. Reducing the influence of IDF increased mean precision@3 from approximately 21.07% to 23.51%.
+
+This suggests that rare words contain useful information, but giving them too much importance may not be ideal for identifying songs from the same genre. A better balance between common and rare words produced better results in this experiment. Future experiments could continue adjusting the weighting of IDF or explore other combinations of the similarity methods to determine whether genre retrieval can be improved further.
+
